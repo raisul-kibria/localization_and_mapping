@@ -3,10 +3,10 @@
 This document describes how to set up the python environment required for the laboratory sessions, provides specific details about the dataset used and lists a series of learning resources.
 
 ## 1. Environment set up
-Please follow the next steps in a linux environemnt using either a linux desktop version or a WSL from a Windows OS.
+Please follow the next steps in a linux environment using either a linux desktop version or a WSL from a Windows OS.
 
 ### 1.1 New environment
-Follow this section only in case of setting the the python environment in a new computer. Continue to next section if you already have the environment from last lab session.
+Follow this section only in case of setting the the python environment in a new computer.
 
 #### 1.1.1 Clone the repository
 First move to the directory were you want to build your environemnt, for instance in a /lib directory in your /home.
@@ -32,6 +32,7 @@ In case you need extra packages install them using the following command.
 
 
 ### 1.2 Update the repository
+Folow this steps for each new lab session.
 Go to your local repository directory, if it is located in a /lib directory on the /home use the following commands.
 
     $ cd lib/11765_MUSI
