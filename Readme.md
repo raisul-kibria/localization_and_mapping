@@ -39,6 +39,7 @@ Go to your local repository directory, if it is located in a /lib directory on t
 
 Now commit your changes and syncronize with the remote repository on github in order to download the files for the new lab session. 
 
+    $ git add -A
     $ git commit -m "add local changes"
     $ git pull
 
