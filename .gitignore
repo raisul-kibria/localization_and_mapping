@@ -1,5 +1,8 @@
 # Specific directories and files
-src/localization/EKF.py 
+notebooks/Lab3.ipynb
+notebooks/S*
+
+#src/localization/EKF.py 
 src/localization/PF.py 
 
 src/mapping
