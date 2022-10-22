@@ -16,7 +16,7 @@ from scipy import stats
 
 
 class ParticleFilter():
-    def __init__(self, dataset, robot, end_frame, num_particles, motion_noise, measurement_noise):
+    def __init__(self, dataset, robot, end_frame, num_particles, motion_noise, measurement_noise, plot=True):
         self.load_data(dataset, robot, end_frame)
         self.initialization(num_particles, motion_noise, measurement_noise)
         for data in self.data:
@@ -28,7 +28,7 @@ class ParticleFilter():
             self.state_update()
             # Plot every n frames
             if (len(self.states) > 800 and len(self.states) % (end_frame / 8) == 0):
-                self.plot_data()
+                if plot: self.plot_data()
 
     def load_data(self, dataset, robot, end_frame):
         # Loading dataset
@@ -116,7 +116,7 @@ class ParticleFilter():
 
         # Skip motion update if two odometry data are too close
         delta_t = control[0] - self.last_timestamp
-        if (delta_t < 0.1):
+        if (delta_t < 0.001):
             return
 
         for particle in self.particles:
@@ -222,16 +222,6 @@ class ParticleFilter():
 
         plt.title("Particle Filter Localization with Known Correspondences")
         plt.legend()
-
-        # Dataset 0
-        # plt.xlim((0.3, 3.7))
-        # plt.ylim((-0.6, 2.7))
-        # plt.pause(1e-16)
-
-        # Dataset 1
-        plt.xlim((-1.5, 5.0))
-        plt.ylim((-6.5, 6.0))
-        plt.pause(1e-16)
 
     def build_dataframes(self):
         self.gt = build_timeseries(self.groundtruth_data, cols=['stamp','x','y','theta'])
