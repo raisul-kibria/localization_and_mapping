@@ -25,7 +25,7 @@ class ParticleFilter():
             else:
                 self.measurement_update(data)
                 self.importance_sampling()
-                self.state_update()
+            self.state_update()
             # Plot every n frames
             if (len(self.states) > 800 and len(self.states) % (end_frame / 8) == 0):
                 if plot: self.plot_data()
