@@ -16,7 +16,7 @@ from scipy import stats
 
 
 class ParticleFilter():
-    def __init__(self, dataset, robot, end_frame, num_particles, motion_noise, measurement_noise):
+    def __init__(self, dataset, robot, end_frame, num_particles, motion_noise, measurement_noise, visualize = True):
         self.load_data(dataset, robot, end_frame)
         self.initialization(num_particles, motion_noise, measurement_noise)
         for data in self.data:
@@ -25,10 +25,11 @@ class ParticleFilter():
             else:
                 self.measurement_update(data)
                 self.importance_sampling()
-            self.state_update()
+                self.state_update()
             # Plot every n frames
-            if (len(self.states) > 800 and len(self.states) % (end_frame / 8) == 0):
-                self.plot_data()
+        if visualize:
+                # if (len(self.states) > 800 and len(self.states) % (end_frame / 8) == 0):
+            self.plot_data()
 
     def load_data(self, dataset, robot, end_frame):
         # Loading dataset
