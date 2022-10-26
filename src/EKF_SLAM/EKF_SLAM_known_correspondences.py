@@ -272,11 +272,10 @@ class ExtendedKalmanFilterSLAM():
 
     def build_dataframes(self):
         self.gt = build_timeseries(self.groundtruth_data, cols=['stamp','x','y','theta'])
-        # stamp = np.expand_dims(self.stamps,axis=-1)
-        # st =  self.states[:,:3]
-        # print(stamp.shape, st.shape)
-        # states = np.stack([stamp,st],axis=0)
-        self.robot_states = build_state_timeseries(self.stamps, self.states[:,:3], cols=['x','y','theta'])
+        data = np.array(self.states[:,:3])
+        stamp = np.expand_dims(self.stamps, axis=1)
+        data_s = np.hstack([stamp,data])
+        self.robot_states = build_timeseries(data_s, cols=['stamp','x','y','theta'])
         
 def build_timeseries(data,cols):
     timeseries = pd.DataFrame(data, columns=cols)
