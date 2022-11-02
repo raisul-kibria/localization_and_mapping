@@ -11,7 +11,7 @@ See Probabilistic Robotics:
 import numpy as np
 import matplotlib.pyplot as plt
 import copy
-
+import pandas as pd
 from .lib.particle import Particle
 
 
