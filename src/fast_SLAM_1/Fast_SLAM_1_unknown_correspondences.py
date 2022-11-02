@@ -375,6 +375,20 @@ class FastSLAM1():
         plt.xlim((-2.0, 5.5))
         plt.ylim((-7.0, 7.0))
         plt.pause(1e-16)
+        
+    def build_dataframes(self):
+        self.gt = build_timeseries(self.groundtruth_data, cols=['stamp','x','y','theta'])
+        self.robot_states = build_timeseries(self.states, cols=['stamp','x','y','theta'])
+        self.measurements = build_timeseries(self.data, cols=['stamp','type','range_l','bearing_l'])
+        self.motion = self.measurements[self.measurements.type == -1].rename(columns={'range_l': 'v', 'bearing_l': 'omega'})
+        landmarks = self.measurements[self.measurements.type != -1]
+        self.sensor = filter_static_landmarks(landmarks, self.barcodes_data)
+        
+def build_timeseries(data,cols):
+    timeseries = pd.DataFrame(data, columns=cols)
+    timeseries['stamp'] = pd.to_datetime(timeseries['stamp'], unit='s')
+    timeseries = timeseries.set_index('stamp')
+    return timeseries
 
 
 if __name__ == "__main__":
