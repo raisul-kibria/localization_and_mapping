@@ -11,6 +11,7 @@ See Probabilistic Robotics:
 '''
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import copy
 
@@ -389,6 +390,12 @@ def build_timeseries(data,cols):
     timeseries['stamp'] = pd.to_datetime(timeseries['stamp'], unit='s')
     timeseries = timeseries.set_index('stamp')
     return timeseries
+
+def filter_static_landmarks(lm, barcodes):
+    for L,l in dict(barcodes).items(): # Translate barcode num to landmark num
+        lm[lm==l]=L
+    lm = lm[lm.type > 5] # Keep only static landmarks 
+    return lm 
 
 
 if __name__ == "__main__":
