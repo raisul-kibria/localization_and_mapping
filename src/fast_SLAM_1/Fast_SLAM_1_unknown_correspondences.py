@@ -11,6 +11,7 @@ See Probabilistic Robotics:
 '''
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import copy
 import pandas as pd
@@ -395,6 +396,7 @@ def filter_static_landmarks(lm, barcodes):
         lm[lm==l]=L
     lm = lm[lm.type > 5] # Keep only static landmarks 
     return lm 
+
 
 if __name__ == "__main__":
     pass
