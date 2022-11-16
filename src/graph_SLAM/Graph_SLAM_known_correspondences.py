@@ -8,6 +8,7 @@ See Probabilistic Robotics:
 '''
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 
@@ -20,7 +21,7 @@ class GraphSLAM():
             self.linearize()
             self.reduce()
             self.solve()
-            if plot: self.plot_data()
+        if plot: self.plot_data()
 
     def load_data(self, dataset, robot, start_frame, end_frame):
         # Loading dataset
@@ -110,6 +111,7 @@ class GraphSLAM():
                 next_state = self.motion_update(self.states[-1], data)
                 self.states = np.append(self.states, np.array([next_state]), axis=0)
                 self.last_timestamp = data[0]
+                self.stamps.append(self.last_timestamp)
 
     def linearize(self):
         # Incorporate control and measurement constraints into information matrix & vector
@@ -145,7 +147,6 @@ class GraphSLAM():
                 self.measurement_update_linearize(state, data)
             # Update indicators
             self.last_timestamp = data[0]
-            self.stamps.append(self.last_timestamp)
 
     def motion_update(self, current_state, control):
         # Input: current robot state X_t-1: [x_t-1, y_t-1, theta_t-1]

@@ -9,6 +9,7 @@ See Probabilistic Robotics:
 '''
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import copy
 
@@ -25,7 +26,7 @@ class FastSLAM1():
         self.motion_model = motion_model
         self.measurement_model = measurement_model
 
-    def load_data(self, dataset, start_frame, end_frame):
+    def load_data(self, dataset, robot, start_frame, end_frame):
         '''
         Load data from UTIAS Multi-Robot Cooperative Localization and Mapping
         Dataset.
@@ -41,14 +42,14 @@ class FastSLAM1():
         # Barcodes: [Subject#, Barcode#]
         self.barcodes_data = np.loadtxt(dataset + "/Barcodes.dat")
         # Ground truth: [Time[s], x[m], y[m], orientation[rad]]
-        self.groundtruth_data = np.loadtxt(dataset + "/Groundtruth.dat")
+        self.groundtruth_data = np.loadtxt(dataset + "/" + robot +"_Groundtruth.dat")
+        #self.groundtruth_data = self.groundtruth_data[2000:] # Remove initial readings
         # Landmark ground truth: [Subject#, x[m], y[m]]
-        self.landmark_groundtruth_data =\
-            np.loadtxt(dataset + "/Landmark_Groundtruth.dat")
+        self.landmark_groundtruth_data = np.loadtxt(dataset + "/Landmark_Groundtruth.dat")
         # Measurement: [Time[s], Subject#, range[m], bearing[rad]]
-        self.measurement_data = np.loadtxt(dataset + "/Measurement.dat")
+        self.measurement_data = np.loadtxt(dataset + "/" + robot +"_Measurement.dat")
         # Odometry: [Time[s], Subject#, forward_V[m/s], angular _v[rad/s]]
-        self.odometry_data = np.loadtxt(dataset + "/Odometry.dat")
+        self.odometry_data = np.loadtxt(dataset + "/" + robot +"_Odometry.dat")
 
         # Collect all input data and sort by timestamp
         # Add subject "odom" = -1 for odometry data
@@ -338,6 +339,32 @@ class FastSLAM1():
         plt.xlim((-2.0, 5.5))
         plt.ylim((-7.0, 7.0))
         plt.pause(1e-16)
+                
+    def build_dataframes(self):
+        self.gt = build_timeseries(self.groundtruth_data, cols=['stamp','x','y','theta'])
+        self.robot_states = build_timeseries(self.states, cols=['stamp','x','y','theta'])
+        self.measurements = build_timeseries(self.data, cols=['stamp','type','range_l','bearing_l'])
+        self.motion = self.measurements[self.measurements.type == -1].rename(columns={'range_l': 'v', 'bearing_l': 'omega'})
+        landmarks = self.measurements[self.measurements.type != -1]
+        self.sensor = filter_static_landmarks(landmarks, self.barcodes_data)
+        
+def build_timeseries(data,cols):
+    timeseries = pd.DataFrame(data, columns=cols)
+    timeseries['stamp'] = pd.to_datetime(timeseries['stamp'], unit='s')
+    timeseries = timeseries.set_index('stamp')
+    return timeseries
+
+def build_state_timeseries(stamp,data,cols):
+    timeseries = pd.DataFrame(data, columns=cols)
+    timeseries['stamp'] = pd.to_datetime(stamp, unit='s')
+    timeseries = timeseries.set_index('stamp')
+    return timeseries
+
+def filter_static_landmarks(lm, barcodes):
+    for L,l in dict(barcodes).items(): # Translate barcode num to landmark num
+        lm[lm==l]=L
+    lm = lm[lm.type > 5] # Keep only static landmarks 
+    return lm 
 
 
 if __name__ == "__main__":
