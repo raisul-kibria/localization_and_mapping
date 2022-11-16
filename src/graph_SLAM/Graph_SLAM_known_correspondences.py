@@ -9,7 +9,7 @@ See Probabilistic Robotics:
 
 import numpy as np
 import matplotlib.pyplot as plt
-
+import pandas as pd
 
 class GraphSLAM():
     def __init__(self, dataset, robot, start_frame, end_frame, N_iterations, R, Q, plot=True):
