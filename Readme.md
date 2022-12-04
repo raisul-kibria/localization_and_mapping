@@ -1,5 +1,3 @@
-<<<<<<< HEAD:doc/Lab0.md
-
 # L0. Introduction
 In this lab session we will familiarize with the datasets that will be used further on in the course. First of all we will work on setting up our working environment, which will be based on python notebooks. Then, once completed the instalation we will start inspecting the datasets provided. 
 
@@ -244,4 +242,4 @@ User guide: https://docs.github.com/en/get-started/using-git/about-git
 Quick guide 1: https://www.freecodecamp.org/news/learn-the-basics-of-git-in-under-10-minutes-da548267cc91/
 
 Quick guide 2: https://blog.reviewnb.com/github-jupyter-notebook/
->>>>>>> edc2448b4ee3a9c069ea7959ad67feed46a50189:Readme.md
+
